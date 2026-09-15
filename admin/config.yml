@@ -1,0 +1,22 @@
+backend:
+  name: git-gateway
+  branch: main
+media_folder: "img"
+public_folder: "/img"
+collections:
+  - name: "site"
+    label: "Website Copy"
+    files:
+      - name: "copy"
+        label: "Site copy"
+        file: "content.json"
+        editor:
+          preview: false
+        fields:
+          - { label: "Home headline, line 1", name: "home_headline_1", widget: "string" }
+          - { label: "Home headline, line 2", name: "home_headline_2", widget: "string" }
+          - { label: "Home subhead", name: "home_subhead", widget: "text" }
+          - { label: "Case studies intro", name: "cases_intro", widget: "text" }
+          - { label: "Work and CV intro", name: "work_intro", widget: "text" }
+          - { label: "Contact headline, line 1", name: "contact_headline_1", widget: "string" }
+          - { label: "Contact headline, line 2", name: "contact_headline_2", widget: "string" }
