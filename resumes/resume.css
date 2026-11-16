@@ -1,0 +1,115 @@
+/* Resume hub, editor, and public resume page. Builds on /styles.css tokens. */
+
+/* ---------- top bar used by hub, editor, and public page ---------- */
+.rbar{position:sticky;top:0;z-index:30;background:rgba(242,241,234,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line-soft)}
+.rbar .in{max-width:1080px;margin:0 auto;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.rbar .me{font-family:var(--serif);font-size:18px}
+.rbar .acts{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.rbtn{display:inline-flex;align-items:center;gap:6px;font:600 11.5px/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--ink);background:transparent;color:var(--ink);padding:11px 16px;cursor:pointer;transition:background .15s,color .15s}
+.rbtn:hover{background:var(--ink);color:var(--paper)}
+.rbtn.solid{background:var(--ink);color:var(--paper)}
+.rbtn.solid:hover{background:var(--accent);border-color:var(--accent)}
+.rbtn.ghost{border-color:var(--line)}
+.rbtn.danger{border-color:#9b3b2b;color:#9b3b2b}
+.rbtn.danger:hover{background:#9b3b2b;color:#fff}
+.rbtn:disabled{opacity:.45;cursor:default}
+.rbtn:focus-visible,.rlink:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.rlink{font-size:13px;color:var(--accent);border-bottom:1px solid currentColor;background:none;border-top:0;border-left:0;border-right:0;cursor:pointer;padding:0;font-family:var(--sans)}
+.status{font-size:12px;color:var(--muted);letter-spacing:.04em;min-width:64px}
+.status.err{color:#9b3b2b}
+
+/* ---------- the resume sheet (always on light paper, like a document) ---------- */
+.stage{padding:40px 24px 80px}
+.sheet{max-width:816px;margin:0 auto;background:#FDFCF8;color:#1A1A17;border:1px solid var(--line-soft);box-shadow:0 18px 50px rgba(26,26,23,.08);padding:58px 66px 64px;font-family:var(--sans);font-size:13px;line-height:1.5}
+.sheet h1.r-name{font-family:var(--serif);font-weight:400;font-size:38px;line-height:1.05;letter-spacing:0}
+.sheet .r-tag{font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-top:12px;line-height:1.4}
+.sheet .r-contact{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5}
+.sheet .r-rule{border:0;border-top:1px solid #1A1A17;margin:20px 0 18px}
+.sheet .r-profile{font-size:13.6px;line-height:1.65}
+.sheet .r-sec h2{font-family:var(--sans);font-weight:700;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin:24px 0 12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.sheet .r-role{margin-bottom:16px;position:relative}
+.sheet .r-row{display:flex;justify-content:space-between;align-items:baseline;gap:14px}
+.sheet .r-title{font-family:var(--serif);font-weight:600;font-size:15.5px;line-height:1.3}
+.sheet .r-meta{font-size:11.5px;color:var(--muted);text-align:right;white-space:nowrap;flex-shrink:0}
+.sheet .r-note{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+.sheet .r-bullets{list-style:none;margin-top:6px}
+.sheet .r-bullets li{position:relative;padding-left:16px;margin-bottom:4px;font-size:12.9px;line-height:1.55}
+.sheet .r-bullets li::before{content:"";position:absolute;left:1px;top:.62em;width:4px;height:4px;background:var(--accent)}
+.sheet .r-line{font-size:12.8px;line-height:1.6;margin-bottom:6px}
+.sheet .r-line b{font-weight:600}
+.sheet .r-edu-title{font-size:12.8px}
+@media (max-width:700px){
+  .stage{padding:20px 10px 60px}
+  .sheet{padding:30px 22px 36px}
+  .sheet h1.r-name{font-size:30px}
+  .sheet .r-row{flex-direction:column;gap:2px}
+  .sheet .r-meta{text-align:left;white-space:normal}
+}
+
+/* ---------- editing affordances ---------- */
+.sheet.is-editing [contenteditable="true"]{outline:none;border-radius:2px;transition:background .12s,box-shadow .12s;min-width:2ch;display:inline-block}
+.sheet.is-editing p[contenteditable="true"],.sheet.is-editing h1[contenteditable="true"]{display:block}
+.sheet.is-editing [contenteditable="true"]:hover{background:rgba(84,96,74,.07)}
+.sheet.is-editing [contenteditable="true"]:focus{background:rgba(84,96,74,.10);box-shadow:0 0 0 2px rgba(84,96,74,.35)}
+.sheet.is-editing [contenteditable="true"]:empty::before{content:attr(data-ph);color:#A6A49B;pointer-events:none}
+.sheet.is-editing .r-btext{display:inline}
+.sheet.is-editing .r-bullets li{padding-right:84px}
+.r-tools{position:absolute;right:0;top:0;display:none;gap:2px}
+.r-tools button{width:24px;height:22px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:13px;line-height:1;cursor:pointer}
+.r-tools button:hover{background:var(--ink);color:#fff}
+.r-tools button[data-act="remove"].confirm{width:auto;padding:0 8px;background:#9b3b2b;color:#fff;border-color:#9b3b2b;font:600 11px/1 var(--sans)}
+.sheet.is-editing [data-item]{position:relative}
+.sheet.is-editing [data-item]:hover>.r-tools,.sheet.is-editing [data-item]:focus-within>.r-tools{display:flex}
+.sheet.is-editing .r-role{padding-top:28px;margin-top:-6px}
+.sheet.is-editing .r-role>.r-tools{top:0}
+.sheet.is-editing .r-lineitem{padding-right:84px}
+.r-add{font:500 11.5px/1 var(--sans);color:var(--accent);background:none;border:1px dashed rgba(84,96,74,.45);padding:7px 10px;margin:4px 0 6px;cursor:pointer}
+.r-add:hover{background:rgba(84,96,74,.08)}
+@media (hover:none){.sheet.is-editing [data-item]>.r-tools{display:flex}}
+
+/* ---------- editor settings panel ---------- */
+.panel{max-width:816px;margin:28px auto 0;border:1px solid var(--line);background:var(--card);padding:20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}
+.panel label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.panel input[type=text]{width:100%;font:14px var(--sans);padding:10px 12px;border:1px solid var(--line);background:#fff;color:var(--ink)}
+.panel input[type=text]:focus{outline:2px solid rgba(84,96,74,.4);outline-offset:0}
+.panel .slugwrap{display:flex;align-items:center;border:1px solid var(--line);background:#fff}
+.panel .slugwrap span{font-size:13px;color:var(--muted);padding-left:12px;white-space:nowrap}
+.panel .slugwrap input{border:0}
+.panel .field-err{font-size:12px;color:#9b3b2b;margin-top:6px;min-height:1em}
+.panel .row2{grid-column:1/-1;display:flex;align-items:center;gap:18px;flex-wrap:wrap;border-top:1px solid var(--line-soft);padding-top:16px}
+.switch{display:inline-flex;align-items:center;gap:10px;font-size:13px;cursor:pointer;user-select:none}
+.switch input{appearance:none;width:38px;height:22px;background:#c9c7bd;border-radius:22px;position:relative;cursor:pointer;transition:background .15s;margin:0}
+.switch input::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .15s}
+.switch input:checked{background:var(--accent)}
+.switch input:checked::after{transform:translateX(16px)}
+.switch input:disabled{opacity:.6;cursor:default}
+.pill{display:inline-block;font:600 10px/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;padding:5px 8px;border:1px solid var(--line);color:var(--muted)}
+.pill.main{border-color:var(--accent);color:var(--accent)}
+.pill.on{background:var(--accent);border-color:var(--accent);color:#fff}
+@media (max-width:700px){.panel{grid-template-columns:1fr;margin:16px 10px 0}}
+
+/* ---------- hub ---------- */
+.hub{max-width:1080px;margin:0 auto;padding:44px 32px 80px}
+.hub h1{font-size:clamp(34px,5vw,54px)}
+.hub .intro{color:var(--muted);max-width:60ch;margin:14px 0 28px;font-size:15px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{border:1px solid var(--line);background:#FDFCF8;padding:20px 20px 16px;display:flex;flex-direction:column;gap:10px}
+.card h3{font-size:21px;line-height:1.2}
+.card .pills{display:flex;gap:6px;flex-wrap:wrap}
+.card .url{font-size:12.5px;color:var(--muted);word-break:break-all}
+.card .when{font-size:12px;color:var(--muted)}
+.card .cacts{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:8px;border-top:1px solid var(--line-soft)}
+.card .cacts .rbtn{padding:9px 11px;font-size:10.5px}
+.gate{max-width:520px;margin:12vh auto;text-align:center;padding:0 24px}
+.gate h1{font-size:40px;margin-bottom:14px}
+.gate p{color:var(--muted);margin-bottom:24px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--paper);font-size:13px;padding:10px 16px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:50}
+.toast.show{opacity:1}
+
+/* ---------- print: just the resume ---------- */
+@media print{
+  .rbar,.panel,.r-add,.r-tools,.toast{display:none!important}
+  body{background:#fff}
+  .stage{padding:0}
+  .sheet{box-shadow:none;border:0;max-width:none;padding:0}
+}
