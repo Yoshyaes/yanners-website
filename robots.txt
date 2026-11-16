@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /resumes/
+Disallow: /api/
+Disallow: /r/

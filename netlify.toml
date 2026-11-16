@@ -1,0 +1,35 @@
+# Site files stay in the repo root. Netlify Functions live in /netlify/functions.
+# No build step. Netlify installs package.json dependencies automatically.
+[build]
+  publish = "."
+  command = ""
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Never serve the function source or config files as web pages.
+[[redirects]]
+  from = "/netlify/*"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/package.json"
+  to = "/404"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/netlify.toml"
+  to = "/404"
+  status = 404
+  force = true
+
+# Keep the private hub and the resume API out of search results and caches.
+[[headers]]
+  for = "/resumes/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    Cache-Control = "no-store"
